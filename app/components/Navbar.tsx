@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import Logo from '@/public/logo.png'
+import AuthModal from "./AuthModal"
 
 const Navbar = () => {
   return (
@@ -10,9 +11,7 @@ const Navbar = () => {
             <h4 className="text-3xl font-semibold">Cal<span className="text-blue-500">JFFC</span></h4>
         </Link>
 
-        <button>
-            Get started today
-        </button>
+        <AuthModal/>
     </div>
   )
 }
