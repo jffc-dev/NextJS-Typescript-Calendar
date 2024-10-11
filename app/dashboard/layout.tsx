@@ -20,11 +20,15 @@ const getData = async(userId: string) => {
             id: userId
         },
         select: {
-            userName: true
+            userName: true,
+            grantId: true
         }
     })
     if(!data?.userName){
         return redirect('/onboarding')
+    }
+    if(!data?.grantId){
+        return redirect('/onboarding/grant-id')
     }
     return data
 }
