@@ -5,6 +5,7 @@ import { requireUser } from "./lib/hooks"
 import { parseWithZod } from '@conform-to/zod'
 import { onboardingSchemaValidation, settingsSchema } from "./lib/zodSchemas"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 export const OnboardingAction = async(prevState: any, formData: FormData) => {
     
@@ -35,7 +36,42 @@ export const OnboardingAction = async(prevState: any, formData: FormData) => {
         },
         data: {
             userName: submission.value.userName,
-            name: submission.value.fullName
+            name: submission.value.fullName,
+            availabilities: {
+                createMany: {
+                    data: [
+                        {
+                            day: 'Monday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        },{
+                            day: 'Tuesday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        },{
+                            day: 'Wednesday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        },{
+                            day: 'Thursday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        },{
+                            day: 'Friday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        },{
+                            day: 'Saturday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        },{
+                            day: 'Sunday',
+                            fromTime: '08:00',
+                            tillTime: '18:00'
+                        }
+                    ]
+                }
+            }
         }
     })
     console.log(data);
@@ -64,4 +100,41 @@ export const SettingsAction = async(prevState: any, formData: FormData) => {
     })
 
     return redirect('/dashboard')
+}
+
+export const updateAvailabilityAction = async(formData: FormData) => {
+    await requireUser()
+    const rawData = Object.fromEntries(formData.entries())
+
+    const availabilityData = Object.keys(rawData).filter((key: string)=>key.startsWith('id-'))
+        .map((key) => {
+            const id = key.replace('id-','')
+            return {
+                id,
+                isActive: rawData[`isActive-${id}`] === 'on',
+                fromTime: rawData[`fromTime-${id}`] as string,
+                tillTime: rawData[`tillTime-${id}`] as string
+            }
+        })
+
+    try {
+        await prisma.$transaction(
+            availabilityData.map((item)=>
+                prisma.availability.update({
+                    where: {
+                        id: item.id
+                    },
+                    data: {
+                        isActive: item.isActive,
+                        fromTime: item.fromTime,
+                        tillTime: item.tillTime
+                    }
+                })
+            )
+        )
+    } catch (error) {
+        console.log(error)
+    }
+
+    revalidatePath('/dashboard/availability')
 }

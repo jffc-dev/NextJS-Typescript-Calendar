@@ -10,33 +10,34 @@ datasource db {
 
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  userName      String?         @unique
-  grantId       String?
-  grantEmail    String?
-  accounts      Account[]
-  sessions      Session[]
+  id                  String          @id @default(cuid())
+  name                String?
+  email               String          @unique
+  emailVerified       DateTime?
+  image               String?
+  userName            String?         @unique
+  grantId             String?
+  grantEmail          String?
+  accounts            Account[]
+  sessions            Session[]
+  availabilities      Availability[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
  
 model Account {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
+  userId              String
+  type                String
+  provider            String
+  providerAccountId   String
+  refresh_token       String?
+  access_token        String?
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
+  session_state       String?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -47,10 +48,10 @@ model Account {
 }
  
 model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionToken        String   @unique
+  userId              String
+  expires             DateTime
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -62,4 +63,28 @@ model VerificationToken {
   expires    DateTime
  
   @@id([identifier, token])
+}
+
+model Availability{
+  id          String @id @default(uuid())
+  day         Day
+  fromTime    String
+  tillTime    String
+  isActive    Boolean   @default(true)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      String?
+
+  User        User?     @relation(fields: [userId], references: [id])
+}
+
+enum Day{
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }
