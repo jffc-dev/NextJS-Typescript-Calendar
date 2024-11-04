@@ -243,7 +243,7 @@ export const cancelMeetingAction = async(formData: FormData) => {
         throw new Error('User not found')
     }
 
-    const data = await nylas.events.destroy({
+    await nylas.events.destroy({
         eventId: formData.get('eventId') as string,
         identifier: usreData.grantId as string,
         queryParams: {
@@ -252,4 +252,31 @@ export const cancelMeetingAction = async(formData: FormData) => {
     })
 
     revalidatePath('/dashboard/meetings')
+}
+
+export const editEventTypeAction = async(prevState: any, formData: FormData) => {
+    const session = await requireUser()
+    const submission = parseWithZod(formData, {
+        schema: eventTypeSchema
+    })
+
+    if(submission.status !== 'success'){
+        return submission.reply()
+    }
+
+    await prisma.eventType.update({
+        where: {
+            id: formData.get('id') as string,
+            userId: session.user?.id
+        },
+        data: {
+            title: submission.value.title,
+            duration: submission.value.duration,
+            url: submission.value.url,
+            description: submission.value.description,
+            videoCallSoftware: submission.value.videoCallSoftware
+        }
+    })
+
+    return redirect('/dashboard')
 }

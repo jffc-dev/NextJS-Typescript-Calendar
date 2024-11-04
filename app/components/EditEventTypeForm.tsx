@@ -7,7 +7,7 @@ import { useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { useState } from "react"
 import { useFormState } from "react-dom"
-import { CreateEventTypeAction } from "../actions"
+import { editEventTypeAction } from "../actions"
 import { eventTypeSchema } from "../lib/zodSchemas"
 import { ButtonGroup } from "@/components/ui/ButtonGroup"
 import { Button } from "@/components/ui/button"
@@ -34,8 +34,8 @@ export const EditEventTypeForm = ({
     duration,
     callProvider,
 }: iAppProps) => {
-    const [activePlatform, setActivePlatform] = useState<VideoCallProvider>('Google Meet')
-    const [lastResult, action] = useFormState(CreateEventTypeAction, undefined)
+    const [activePlatform, setActivePlatform] = useState<VideoCallProvider>(callProvider as VideoCallProvider)
+    const [lastResult, action] = useFormState(editEventTypeAction, undefined)
     const [form, fields] = useForm({
         lastResult,
         onValidate({formData}){
@@ -51,35 +51,36 @@ export const EditEventTypeForm = ({
         <div className="w-full h-full flex flex-1 items-center justify-center">
             <Card>
                 <CardHeader>
-                    <CardTitle>Add new appointment type</CardTitle>
-                    <CardDescription>Create new appointment type that allows people to book you!</CardDescription>
+                    <CardTitle>Edit appointment type</CardTitle>
+                    <CardDescription>Edit your appointment type that allows people to book you!</CardDescription>
                 </CardHeader>
 
                 <form id={form.id} onSubmit={form.onSubmit} action={action} noValidate>
+                    <input type="hidden" name="id" value={id} />
                     <CardContent className="grid gap-y-5">
                         <div className="flex flex-col gap-y-2">
                             <Label>Title</Label>
-                            <Input name={fields.title.name} key={fields.title.key} defaultValue={fields.title.initialValue} placeholder="30 Minute meeting"/>
+                            <Input name={fields.title.name} key={fields.title.key} defaultValue={title} placeholder="30 Minute meeting"/>
                             <p className="text-red-500 text-sm">{fields.title.errors}</p>
                         </div>
                         <div className="flex flex-col gap-y-2">
                             <Label>URL Slug</Label>
                             <div className="flex rounded-md">
                                 <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-muted bg-muted text-sm text-muted-foreground">CallJFFC.com/</span>
-                                <Input name={fields.url.name} key={fields.url.key} defaultValue={fields.url.initialValue} placeholder="Example-url-1"/>
+                                <Input name={fields.url.name} key={fields.url.key} defaultValue={url} placeholder="Example-url-1"/>
                             </div>
                             <p className="text-red-500 text-sm">{fields.url.errors}</p>
                         </div>
                         <div className="flex flex-col gap-y-2">
                             <Label>Description</Label>
-                            <Textarea name={fields.description.name} key={fields.description.key} defaultValue={fields.description.initialValue} placeholder="Meet me in this meeting to meet me!"/>
+                            <Textarea name={fields.description.name} key={fields.description.key} defaultValue={description} placeholder="Meet me in this meeting to meet me!"/>
                             <p className="text-red-500 text-sm">{fields.description.errors}</p>
                         </div>
 
                         <div className="flex flex-col gap-y-2">
                             <Label>Duration</Label>
                             <Select
-                                name={fields.duration.name} key={fields.duration.key} defaultValue={fields.duration.initialValue}
+                                name={fields.duration.name} key={fields.duration.key} defaultValue={String(duration)}
                                 >
                                 <SelectTrigger>
                                     <SelectValue placeholder='Select duration'/>
