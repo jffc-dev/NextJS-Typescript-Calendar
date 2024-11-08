@@ -4,7 +4,7 @@ import { requireUser } from "../lib/hooks"
 import EmptyState from "../components/EmptyState"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ExternalLink, Link2, Pen, Settings, Trash, Users2 } from "lucide-react"
+import { ExternalLink, Pen, Settings, Trash, Users2 } from "lucide-react"
 import { Switch } from "@/components/ui/switch"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { CopyLinkMenuItem } from "../components/CopyLinkMenu"
@@ -107,7 +107,11 @@ const DashboardPage = async() => {
                 <div className="bg-muted px-5 py-3 justify-between items-center flex">
                   <Switch/>
 
-                  <Button>Edit Event</Button>
+                  <Button asChild>
+                    <Link href={`/dashboard/event/${item.id}`}>
+                      Edit Event
+                    </Link>
+                  </Button>
                 </div>
               </div>
             ))}

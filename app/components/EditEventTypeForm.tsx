@@ -116,7 +116,7 @@ export const EditEventTypeForm = ({
                         <Button asChild variant='secondary'>
                             <Link href='/dashboard'>Cancel</Link>
                         </Button>
-                        <SubmitButton text="Create Event Type"/>
+                        <SubmitButton text="Edit Event Type"/>
                     </CardFooter>
                 </form>
             </Card>
