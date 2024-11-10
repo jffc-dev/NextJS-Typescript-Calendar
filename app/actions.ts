@@ -308,3 +308,16 @@ export const updateEventTypeStatusAction = async(prevState: any, {eventTypeId, i
         }
     }
 }
+
+export const deleteEventTypeAction = async(formData: FormData) => {
+    const session = await requireUser()
+
+    await prisma.eventType.delete({
+        where: {
+            id: formData.get('id') as string,
+            userId: session.user?.id
+        }
+    })
+
+    return redirect('/dashboard')
+}
