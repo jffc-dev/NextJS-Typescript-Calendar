@@ -5,9 +5,9 @@ import EmptyState from "../components/EmptyState"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ExternalLink, Pen, Settings, Trash, Users2 } from "lucide-react"
-import { Switch } from "@/components/ui/switch"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { CopyLinkMenuItem } from "../components/CopyLinkMenu"
+import { MenuActiveSwitcher } from "../components/EventTypeSwitcher"
 
 const getData = async(userId: string) => {
   const data = await prisma.user.findUnique({
@@ -82,8 +82,10 @@ const DashboardPage = async() => {
                           <Link href={`/dashboard/event/${item.id}`}><Pen className="mr-2 size-4"/>Edit</Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator/>
-                        <DropdownMenuItem>
-                          <Trash className="mr-2 size-4"/>Delete
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/event/${item.id}/delete`}>
+                            <Trash className="mr-2 size-4"/>Delete
+                          </Link>
                         </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </DropdownMenuContent>
@@ -105,7 +107,7 @@ const DashboardPage = async() => {
                   </div>
                 </Link>
                 <div className="bg-muted px-5 py-3 justify-between items-center flex">
-                  <Switch/>
+                  <MenuActiveSwitcher initialChecked={item.isActive} eventTypeId={item.id}/>
 
                   <Button asChild>
                     <Link href={`/dashboard/event/${item.id}`}>
