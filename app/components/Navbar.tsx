@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import Logo from '@/public/logo.png'
 import AuthModal from "./AuthModal"
+import { ThemeToggle } from "./ThemeToggle"
 
 const Navbar = () => {
   return (
@@ -11,7 +12,10 @@ const Navbar = () => {
             <h4 className="text-3xl font-semibold">Cal<span className="text-blue-500">JFFC</span></h4>
         </Link>
 
-        <AuthModal/>
+        <div className="hidden md:flex md:justify-end md:space-x-4">
+          <ThemeToggle/>
+          <AuthModal/>
+        </div>
     </div>
   )
 }
