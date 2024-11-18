@@ -56,17 +56,21 @@ const MeetingsPage = async() => {
                             <div className="grid grid-cols-3 justify-between items-center">
                                 <div>
                                     <p className="text-muted-foreground text-sm">
+                                        {/* @ts-expect-error type */}
                                         {format(fromUnixTime(item.when.startTime), 'EEE, dd MMM')}
                                     </p>
                                     <p className="text-muted-foreground text-xs pt-1">
+                                        {/* @ts-expect-error type */}
                                         {format(fromUnixTime(item.when.startTime), 'hh:mm a')}
                                         -
+                                        {/* @ts-expect-error type */}
                                         {format(fromUnixTime(item.when.endTime), 'hh:mm a')}
                                     </p>
                                     <div className="flex items-center mt-1">
                                         <Video className="size-4 mr-2 text-primary"/>
                                         <a className="text-xs text-pretty underline underline-offset-4 text-primary"
                                             target="_blank" 
+                                            //@ts-expect-error type
                                             href={item.conferencing.details.url}>
                                             Join Meeting
                                         </a>

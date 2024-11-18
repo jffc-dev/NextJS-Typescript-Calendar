@@ -59,6 +59,7 @@ const calculateAvailabletTimeSlots = (date: string, dbAvailability: {
     const availableTill = parse(
         `${date} ${dbAvailability.tillTime}`, 'yyyy-MM-dd HH:mm', new Date()
     )
+    //@ts-expect-error type
     const busySlots = nylasData.data[0].timeSlots.map((slot: any) => ({
         start: fromUnixTime(slot.startTime),
         end: fromUnixTime(slot.endTime)
