@@ -11,6 +11,7 @@ export const CopyLinkMenuItem = ({meetingUrl}: {meetingUrl: string}) => {
             await navigator.clipboard.writeText(meetingUrl)
             toast.success('URL has been copied')
         } catch (error) {
+            console.log(error)
             toast.error('Could not copy the url')
         }
     }
